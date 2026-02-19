@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: listing-service
+
+server:
+  port: 8080
+
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8761/eureka
+    instance:
+        instance-id: ${spring.application.name}:${random.value} # name of the service that will be registered in Registry
+        prefer-ip-address: true
+        leaseRenewalIntervalInSeconds: 5    # period of health checking ping
+        leaseExpirationDurationInSeconds: 25 # if server does not respond in x time, remove from Registry
+
+management:
+  tracing:
+    sampling:
+        probability: 1.0
+
+logging:
+    pattern:
+      correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
+    include-application-name: on
